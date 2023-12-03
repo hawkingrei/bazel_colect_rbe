@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"cmp"
 	"fmt"
 	"log"
 	"os"
@@ -82,8 +83,12 @@ func compareProfileBlock(x, y cover.ProfileBlock) int {
 
 func mergeProfile(m map[string]*cover.Profile, profs []*cover.Profile) {
 	for _, prof := range profs {
-		slices.SortFunc(prof.Blocks, func(bi, bj cover.ProfileBlock) bool {
-			return bi.StartLine < bj.StartLine || bi.StartLine == bj.StartLine && bi.StartCol < bj.StartCol
+		slices.SortFunc(prof.Blocks, func(bi, bj cover.ProfileBlock) int {
+			c := cmp.Compare(bi.StartLine, bj.StartLine)
+			if c != 0 {
+				return c
+			}
+			return cmp.Compare(bi.StartCol, bj.StartCol)
 		})
 		old, ok := m[prof.FileName]
 		if !ok {
