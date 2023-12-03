@@ -48,6 +48,7 @@ func MergeCoverage(files []string, output string) {
 }
 
 func collectOneCoverProfileFile(result map[string]*cover.Profile, file string) {
+	fmt.Println(file)
 	f, err := os.Open(file)
 	if err != nil {
 		log.Fatal("open temp cover file error:", err)
